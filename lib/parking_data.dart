@@ -1,6 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
-
 /*
   Desc:
     A class that manages database functions and retrieves parking data from
@@ -24,51 +22,97 @@ class ParkingDatabaseService {
       }
       else {
         // Initialize and update parking data
-        print(event.snapshot.value);
+        parkingList.clear();
         // Iterate through every location subitem in Firebase database
         for (final location in event.snapshot.children) {
-          print(location.value);
-          // Create new _ParkingLocation object for each subitem and
-          /*ParkingLocation(
-            name:
-            coords:
-            decals:
-
-          )*/
-          // construct each _ParkingLocation object according to its values
-
+          List<double> locationCoords = [];
+          for (int i = 0; i < location.child("coords").children.length; i++) {
+            locationCoords.add(location.child("coords/$i").value as double);
+          }
+          List<String> locationDecals = [];
+          for (int i = 0; i < location.child("decals").children.length; i++) {
+            locationDecals.add(location.child("decals/$i").value as String);
+          }
+          List<String> locationNotes = [];
+          for (int i = 0; i < location.child("notes").children.length; i++) {
+            locationNotes.add(location.child("notes/$i").value as String);
+          }
+          // Add new ParkingLocation object for each subitem and
+          // construct each ParkingLocation object according to its values
+          parkingList.add(
+            ParkingLocation(
+              name: location.child("name").value as String,
+              coordPair: locationCoords,
+              decals: locationDecals,
+              approxCap: location.child("approxCap").value as String,
+              restrictStart: location.child("restrictStart").value as String,
+              restrictEnd: location.child("restrictEnd").value as String,
+              hasDisabled: location.child("disabled").value as bool,
+              hasEV: location.child("ev").value as bool,
+              hasMotorScooter: location.child("motorScooter").value as bool,
+              hasPaid: location.child("paid").value as bool,
+              notes: locationNotes
+            )
+          );
         }
-        // Sort list
+        // Sort list alphabetically by name
+        parkingList.sort();
       }
     });
   }
 }
 
-class ParkingLocation {
+/*
+    Desc:
+      A class that stores pertinent information for a particular parking location
+ */
+class ParkingLocation extends Comparable {
   // Parking information
   final String? name;
-  final List<double>? coords;
+  final List<double>? coordPair;
   final List<String>? decals;
   final String? approxCap;
   final String? restrictStart;
   final String? restrictEnd;
-  final bool? disabled;
-  final bool? ev;
-  final bool? motorScooter;
-  final bool? paid;
+  final bool? hasDisabled;
+  final bool? hasEV;
+  final bool? hasMotorScooter;
+  final bool? hasPaid;
   final List<String>? notes;
 
   ParkingLocation({
-    this.name,
-    this.coords,
-    this.decals,
-    this.approxCap,
-    this.restrictStart,
-    this.restrictEnd,
-    this.disabled,
-    this.ev,
-    this.motorScooter,
-    this.paid,
-    this.notes
+    required this.name,
+    required this.coordPair,
+    required this.decals,
+    required this.approxCap,
+    required this.restrictStart,
+    required this.restrictEnd,
+    required this.hasDisabled,
+    required this.hasEV,
+    required this.hasMotorScooter,
+    required this.hasPaid,
+    required this.notes
   });
+
+  @override
+  String toString() {
+    if (name == null) { return "null"; }
+    else { return name!; }
+  }
+
+  @override
+  int compareTo(other) {
+    if (name == null && other.name == null){
+      return 0;
+    }
+    else if (name == null) {
+      return (1.0 / 0.0) as int;
+    }
+    else if (other.name == null) {
+      return (-1.0 / 0.0) as int;
+    }
+    else {
+      return name!.compareTo(other.name!);
+    }
+  }
 }
