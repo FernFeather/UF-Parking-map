@@ -44,6 +44,9 @@ dependencies:
   url_launcher: ^6.1.7
   http: ^0.13.5
   flutter_rating_bar: ^4.0.1
+  firebase_core: ^2.3.0
+  firebase_auth: ^4.1.5
+  firebase_database: ^10.0.6
 
 dev_dependencies:
   flutter_test:
