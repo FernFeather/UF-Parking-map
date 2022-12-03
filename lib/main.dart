@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:parkings_/screens/Search.dart';
-import 'package:parkings_/services/geolocateService.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'parking_data.dart';
+import 'screens/Search.dart';
+import 'services/geolocateService.dart';
+import 'services/parking_data.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,12 +25,11 @@ class MyApp extends StatelessWidget {
       initialData: null,
       create: (context) => locatorService.getLocation(),
       child: MaterialApp(
-        title: 'Parkbois',
+        title: 'UF Parking',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.lightBlue,
         ),
-        //home: const MyHomePage(title: 'Parkkkkkkoings'),
-        home: Search(),
+        home: Search()    // Home screen
       ),
     );
   }
