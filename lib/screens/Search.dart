@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+import 'package:parkings_/services/parking_data.dart';
 
 class Search extends StatelessWidget {
   @override
@@ -13,15 +14,31 @@ class Search extends StatelessWidget {
             ? Column(
                 children: <Widget>[
                   Container(
-                      height: MediaQuery.of(context).size.height / 3,
-                      width: MediaQuery.of(context).size.width,
-                      child: GoogleMap(
-                          zoomGesturesEnabled: true,
-                          initialCameraPosition: CameraPosition(
-                              target: LatLng(currentPosition.latitude,
-                                  currentPosition.longitude),
-                              //target: LatLng(29.6328784, -82.34901329340119),
-                              zoom: 16.0)))
+                    height: MediaQuery.of(context).size.height / 3,
+                    width: MediaQuery.of(context).size.width,
+                    child: GoogleMap(
+                      zoomGesturesEnabled: true,
+                      initialCameraPosition: CameraPosition(
+                          target: LatLng(29.6328784, -82.34901329340119),
+                          //target: LatLng(currentPosition.latitude, currentPosition.longitude ),
+                          zoom: 16.0),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Expanded(
+                      child: ListView.builder(
+                    itemCount: ParkingDatabaseService.parkingList.length,
+                    itemBuilder: ((context, index) {
+                      return Card(
+                        child: ListTile(
+                          title: Text(
+                              ParkingDatabaseService.parkingList[index].name!),
+                        ),
+                      );
+                    }),
+                  ))
                 ],
               )
             : Center(
