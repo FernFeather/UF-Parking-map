@@ -14,6 +14,10 @@ class ParkingDatabaseService {
   // Accessing the database?
   static FirebaseDatabase database = FirebaseDatabase.instance;
   static DatabaseReference dbRef = database.ref("locations/");
+  // Not the best implementation to wait for parking data, but it will do
+  static Future<void> awaitParkingData() async {
+    while(await dbRef.onValue.isEmpty) {}
+  }
   // Creates event listener to listen and react to database changes
   static startEventListener() {
     dbRef.onValue.listen((DatabaseEvent event) {
