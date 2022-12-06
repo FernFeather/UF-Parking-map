@@ -1,16 +1,3 @@
-# parkings_
+# UF-Parking-map
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Our team seeks to tackle the challenge of finding parking on campus, which continues to be a source of confusion and distress for many students at the university. Our proposed solution is to develop an application that aggregates relevant parking information (e.g. required decals, times of parking enforcement, closures, capacity, etc.) onto an interactive map of the campus to inform users of potential locations where they could park. By making this information easily accessible to users, we hope to alleviate the distress, confusion, and frustration experienced by off-campus commuters who struggle to find a place to park without getting ticketed. 

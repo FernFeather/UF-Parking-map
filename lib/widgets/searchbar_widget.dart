@@ -40,8 +40,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           isIgnoring = false;
           hintText = "";
         });
-      }
-      else {
+      } else {
         setState(() {
           isIgnoring = true;
           hintText = "Search Locations";
@@ -63,7 +62,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
         color: Colors.transparent,
         child: IgnorePointer(
           ignoring: isIgnoring,
-          child:TextField (
+          child: TextField(
             onChanged: (String query) => _searchLocation(query),
             focusNode: focusNode,
             controller: controller,
@@ -80,7 +79,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
               hintText: hintText,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(
-                  MediaQuery.of(context).size.height * (1/24),
+                  MediaQuery.of(context).size.height * (1 / 24),
                 ),
                 borderSide: const BorderSide(color: Colors.grey),
               ),
@@ -93,10 +92,10 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
 
   void _searchLocation(String query) {
     final suggestions = ParkingDatabaseService.parkingList.where((location) {
-        final locationName = location.name!.toLowerCase();
-        final input = query.toLowerCase();
+      final locationName = location.name!.toLowerCase();
+      final input = query.toLowerCase();
 
-        return locationName.contains(input);
+      return locationName.contains(input);
     }).toList();
 
     setState(() {
@@ -106,7 +105,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   }
 
   void _onTap() {
-    setState(() { });
+    setState(() {});
     widget.pc.open();
     FocusScope.of(context).requestFocus(focusNode);
   }
