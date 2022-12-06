@@ -20,8 +20,31 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Image.asset('assets/logoText.png'),
-              Image.asset('Florida_Gators_gator_logo.svg.png'),
+              Center(
+                child: Text(
+                  "UF Parking",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: MediaQuery.of(context).size.width * 0.20),
+                ),
+              ),
+              Center(
+                child: Text(
+                  "Map",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: MediaQuery.of(context).size.width * 0.20),
+                ),
+              ),
+
+              //Image.asset('assets/logoText.png'),
+              Image.asset(
+                'Florida_Gators_gator_logo.svg.png',
+                height: MediaQuery.of(context).size.width * 0.85,
+                width: MediaQuery.of(context).size.width * 0.85,
+              ),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.6,
                 height: MediaQuery.of(context).size.height / 14,
