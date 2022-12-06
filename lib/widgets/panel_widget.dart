@@ -13,14 +13,15 @@
             - Update when searchbar widget updates?
       2. Make list tiles buttons
         - Give list tiles state where they change color on press
-        - On release have panel change state to info state
+        - On release have panel change state to info state -> (3)
         - On button click, center camera position to location coordinates
       3. Make info state widget
         - enable parallax to center location marker
         - Display parking area info
         - Have icon to go back to search list
         - If search bar is reselected, change back to search list
-      4. Gestures
+      4. Have click on marker activate info state widget
+      5. Gestures
         - Swipe left or right gesture
           - closes list if open on search page
           - closes info panel and goes back to search panel
@@ -129,18 +130,11 @@ class _PanelWidgetState extends State<PanelWidget> {
         controller: _pc,
         backdropEnabled: true,
         backdropOpacity: 0.0,
-        maxHeight: MediaQuery.of(context).size.height * 0.65,
-        minHeight: MediaQuery.of(context).size.height * (1 / 11),
-        parallaxEnabled: true,
+        maxHeight: MediaQuery.of(context).size.height * (9/10),
+        minHeight: MediaQuery.of(context).size.height * (1/11),
+        parallaxEnabled: false,
         parallaxOffset: 0.4,
-        body: Column(
-          children: <Widget>[
-            SizedBox(
-                height: MediaQuery.of(context).size.height * (3.1 / 4),
-                width: MediaQuery.of(context).size.width,
-                child: const MapsWidget()),
-          ],
-        ),
+        body: const MapsWidget(),
         /*
         ===================================================
         ============= SLIDE UP PANEL HEADER  ==============
@@ -204,10 +198,6 @@ class _PanelWidgetState extends State<PanelWidget> {
 
   Widget _getCurrentState(ScrollController controller) {
     _sc = controller;
-    return _currentState!;
-  }
-
-  Widget _checkCurrentState() {
     return _currentState!;
   }
 }

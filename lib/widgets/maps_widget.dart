@@ -4,9 +4,6 @@
         app.
 
     To-do:
-      - Fix map positioning
-      - Fix map loading screen and initial position
-      - If user accepts location service, zoom in on their position
       - Remove Google's parking markers
  */
 import 'package:flutter/material.dart';
@@ -27,39 +24,68 @@ class MapsWidget extends StatefulWidget {
 class _MapsWidgetState extends State<MapsWidget> {
   final LatLng coordinatesUF =
       const LatLng(29.643668902938217, -82.35492419939918);
-  final Set<Marker> markers = new Set();
+  final Set<Marker> markers = Set();
+  double bottomOffset = 0;
+  GoogleMapController? _mapController;
 
   @override
   Widget build(BuildContext context) {
     final currentPosition = Provider.of<Position?>(context);
-    GoogleMapController? mapController;
     /*
       ============== GOOGLE MAPS PANEL ============
     */
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: GoogleMap(
-        zoomGesturesEnabled: true,
-        myLocationEnabled: (currentPosition != null) ? true : false,
-        myLocationButtonEnabled: false,
-        padding: (mapController == null)
-            ? EdgeInsets.zero
-            : EdgeInsets.only(
-                bottom: MediaQuery.of(context).size.height * (1 / 12),
+    return Stack(
+      children: <Widget>[
+        Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: GoogleMap(
+            zoomGesturesEnabled: true,
+            myLocationEnabled: (currentPosition != null) ? true : false,
+            myLocationButtonEnabled: false,
+            padding: EdgeInsets.only(
+              bottom: bottomOffset,
+            ),
+            initialCameraPosition: CameraPosition(
+                target: coordinatesUF,
+                zoom: 16.0
+            ),
+            onMapCreated: (GoogleMapController controller) {
+              _mapController = controller;
+              setState(() {
+                bottomOffset = MediaQuery.of(context).size.height * (1/11);
+              });
+            },
+            markers: getMarkers(),
+          ),
+        ),
+        Positioned(
+          top: MediaQuery.of(context).size.height * (8/11) - 12,
+          left: MediaQuery.of(context).size.width - 64,
+          child: (currentPosition != null)
+            ? FloatingActionButton(
+              onPressed: () {
+                _mapController!.moveCamera(
+                    CameraUpdate.newCameraPosition(
+                      CameraPosition(
+                          target: LatLng(
+                            currentPosition.latitude,
+                            currentPosition.longitude,
+                          ),
+                          zoom: 16,
+                      )
+                    )
+                );
+              },
+              backgroundColor: Colors.white.withOpacity(0.8),
+              child: const Icon(
+                Icons.gps_fixed,
+                color: Colors.black54,
               ),
-        initialCameraPosition: CameraPosition(
-            target: (currentPosition != null)
-                // Target user's current position
-                ? LatLng(currentPosition.latitude, currentPosition.longitude)
-                // Target University of Florida
-                : coordinatesUF,
-            zoom: 16.0),
-        onMapCreated: (GoogleMapController controller) {
-          setState(() {});
-        },
-        markers: getMarkers(),
-      ),
+            )
+            : SizedBox.shrink()
+        ),
+      ],
     );
   }
 

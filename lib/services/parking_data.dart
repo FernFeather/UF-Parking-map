@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
   Notes:
     What happens when database gets updated when app is running?
+      Updates to parking list needs to trigger a list "refresh" in panel_widget
  */
 class ParkingDatabaseService {
   // Parking location objects stored in this list
