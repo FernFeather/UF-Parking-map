@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "319928501602",
+    "firebase_url": "https://uf-parking-map-default-rtdb.firebaseio.com",
+    "project_id": "uf-parking-map",
+    "storage_bucket": "uf-parking-map.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319928501602:android:d4122a79d7890c2def583b",
+        "android_client_info": {
+          "package_name": "com.example.uf_parking_map"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "319928501602-74u4iamgtlchjnapjsq5j00dumkgl9f7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwxtfjo-QtYcGj_zGzDBiBXq1ic9lROXw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "319928501602-74u4iamgtlchjnapjsq5j00dumkgl9f7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "319928501602-09umuahlj5brji033qtrgvlal87tjpno.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ufParkingMap"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
