@@ -1,74 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:parkings_/provider/google_sign_in.dart';
-import 'package:provider/provider.dart';
-import 'package:parkings_/services/parking_data.dart';
+import '../widgets/panel_widget.dart';
 
-class Search extends StatelessWidget {
+/*
+  Notes:
+    This class is kinda useless, but I guess it exists in case we change
+    screens. Like, go from log in screen to the home screen, where this is the
+    home screen.
+ */
+class Search extends StatefulWidget {
+  const Search({Key? key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    final currentPosition = Provider.of<Position?>(context);
-
-    return Scaffold(
-        appBar: AppBar(
-          actions: [
-            TextButton(
-              child: Text('Logout'),
-              onPressed: () {
-                final provider =
-                    Provider.of<GoogleSignInProvider>(context, listen: false);
-                provider.logout();
-              },
-            )
-          ],
-        ),
-        body: (currentPosition != null)
-            ? Column(
-                children: <Widget>[
-                  Container(
-                    height: MediaQuery.of(context).size.height / 3,
-                    width: MediaQuery.of(context).size.width,
-                    child: GoogleMap(
-                      zoomGesturesEnabled: true,
-                      initialCameraPosition: CameraPosition(
-                          target: LatLng(29.6328784, -82.34901329340119),
-                          //target: LatLng(currentPosition.latitude, currentPosition.longitude ),
-                          zoom: 16.0),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Expanded(
-                      child: ListView.builder(
-                    itemCount: ParkingDatabaseService.parkingList.length,
-                    itemBuilder: ((context, index) {
-                      return Card(
-                        child: ListTile(
-                          title: Text(
-                              ParkingDatabaseService.parkingList[index].name!),
-                        ),
-                      );
-                    }),
-                  ))
-                ],
-              )
-            : Center(
-                child: CircularProgressIndicator(),
-              ));
-  }
+  State<Search> createState() => _SearchState();
 }
 
-/*class Search extends StatelessWidget {
+class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GoogleMap(
-        zoomControlsEnabled: true,
-        initialCameraPosition:
-            CameraPosition(target: LatLng(29.6516, 82.3248), zoom: 8.0),
-      ),
-    );
+    return GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus
+            ?.unfocus(), // Needed to unfocus keyboard
+        child: Scaffold(
+            resizeToAvoidBottomInset:
+                false, // Needed to avoid keyboard from pushing widgets
+            appBar: AppBar(
+              title: const Text("UF Parking Map"),
+              backgroundColor: Colors.green[700],
+            ),
+            body: Stack(
+              children: <Widget>[
+                PanelWidget(),
+              ],
+            )));
   }
-}*/
+}
