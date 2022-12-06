@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:parkings_/provider/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:parkings_/services/parking_data.dart';
 
@@ -10,6 +11,18 @@ class Search extends StatelessWidget {
     final currentPosition = Provider.of<Position?>(context);
 
     return Scaffold(
+        appBar: AppBar(
+          actions: [
+            TextButton(
+              child: Text('Logout'),
+              onPressed: () {
+                final provider =
+                    Provider.of<GoogleSignInProvider>(context, listen: false);
+                provider.logout();
+              },
+            )
+          ],
+        ),
         body: (currentPosition != null)
             ? Column(
                 children: <Widget>[
