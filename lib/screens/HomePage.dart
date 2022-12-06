@@ -1,23 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:parkings_/screens/MapTransfer.dart';
-import 'package:parkings_/screens/SignUpWidget.dart';
+import '../widgets/panel_widget.dart';
 
-class HomePage extends StatelessWidget {
+/*
+  Notes:
+    This class is kinda useless, but I guess it exists in case we change
+    screens. Like, go from log in screen to the home screen, where this is the
+    home screen.
+ */
+class Search extends StatefulWidget {
+  const Search({Key? key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) => Scaffold(
-          body: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasData) {
-            return MapTransfer();
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Something Went Wrong!'));
-          } else {
-            return SignUpWidget();
-          }
-        },
-      ));
+  State<Search> createState() => _SearchState();
+}
+
+class _SearchState extends State<Search> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(), // Needed to unfocus keyboard
+        child: Scaffold(
+            resizeToAvoidBottomInset: false, // Needed to avoid keyboard from pushing widgets
+            body: Stack(
+              children: <Widget>[
+                PanelWidget(),
+              ],
+            )
+        )
+    );
+  }
 }

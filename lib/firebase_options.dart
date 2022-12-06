@@ -70,7 +70,8 @@ class DefaultFirebaseOptions {
     projectId: 'uf-parking-map',
     databaseURL: 'https://uf-parking-map-default-rtdb.firebaseio.com',
     storageBucket: 'uf-parking-map.appspot.com',
-    iosClientId: '319928501602-09umuahlj5brji033qtrgvlal87tjpno.apps.googleusercontent.com',
+    iosClientId:
+        '319928501602-09umuahlj5brji033qtrgvlal87tjpno.apps.googleusercontent.com',
     iosBundleId: 'com.example.ufParkingMap',
   );
 
@@ -81,7 +82,8 @@ class DefaultFirebaseOptions {
     projectId: 'uf-parking-map',
     databaseURL: 'https://uf-parking-map-default-rtdb.firebaseio.com',
     storageBucket: 'uf-parking-map.appspot.com',
-    iosClientId: '319928501602-09umuahlj5brji033qtrgvlal87tjpno.apps.googleusercontent.com',
+    iosClientId:
+        '319928501602-09umuahlj5brji033qtrgvlal87tjpno.apps.googleusercontent.com',
     iosBundleId: 'com.example.ufParkingMap',
   );
 }

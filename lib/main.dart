@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:parkings_/provider/google_sign_in.dart';
-import 'package:parkings_/screens/HomePage.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'provider/google_sign_in.dart';
 import 'services/parking_data.dart';
+import 'screens/PageStateController.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,28 +12,18 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   ParkingDatabaseService.startEventListener();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  //MyApp({super.key});
-  //final locatorService = geolocateService();
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
-        //return FutureProvider(
-        //initialData: null,
-        create: (context) => GoogleSignInProvider(),
-        //create: (context) => locatorService.getLocation(),
-        child: MaterialApp(
-          title: 'Parkbois',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-          //home: const MyHomePage(title: 'Parkkkkkkoings'),
-          home: HomePage(),
-        ),
-        //);
-      );
+    create: (context) => GoogleSignInProvider(),
+    child: CurrentPage(),
+  );
 }
+
+
