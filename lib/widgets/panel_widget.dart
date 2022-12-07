@@ -152,7 +152,7 @@ class _PanelWidgetState extends State<PanelWidget> {
         )
       )
     );
-    _pc.animatePanelToPosition(0.65/0.90); // Implied that panel is open if user presses list tile
+    _pc.animatePanelToPosition(0.65); // Implied that panel is open if user presses list tile
     setState(() {
       parallaxState = true;
       panelMaxHeight = MediaQuery.of(widget.context).size.height * (6.5/10);
@@ -365,131 +365,157 @@ class _StateDisplayInfoState extends State<_StateDisplayInfo> {
       child: Stack(
         children: <Widget>[
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+               Divider(
+                 height: 8.0,
+                 color: Colors.white,
+               ),
                Center( // Location name
-                child: Text(
+                 child: Text(
                   widget.location.name!,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
+                    fontSize: 20,
                   )
                 ),
               ),
-              RichText( // Decals
-                text: TextSpan(
-                  text: "Decals: ",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: locationDecalsAsString(),
-                    ),
-                  ]
+              Divider(
+                color: Colors.blueGrey,
+                height: 15.0,
+                thickness: 1.0,
+                indent: MediaQuery.of(context).size.width * 0.10,
+                endIndent: MediaQuery.of(context).size.width * 0.10,
+              ),
+              Container(
+                padding: EdgeInsets.only(
+                  top: 4,
+                  left: 12,
                 ),
-              ),
-              RichText( // Paid
-                text: TextSpan(
-                  text: "Paid: ",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: (widget.location.hasPaid!)
-                      ? "Yes"
-                      : "No",
-                    ),
-                  ]
-                ),
-              ),
-              RichText( // Restrictions
-                text: TextSpan(
-                  text: "Restrictions: ",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: (widget.location.restrictStart!.compareTo("24/7") == 0)
-                      ? "24/7"
-                      : "Mon-Fri: " + widget.location.restrictStart! + " - " + widget.location.restrictEnd!,
-                    )
-                  ]
-                )
-              ),
-              RichText( // Approximate Capacity
-                text: TextSpan(
-                  text: "Approximate Capacity: ",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: widget.location.approxCap!,
-                    )
-                  ]
-                )
-              ),
-              RichText( // MotorScooter
-                text: TextSpan(
-                  text: "Motorcycle/Scooter:",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: (widget.location.hasMotorScooter!)
-                      ? "Yes"
-                      : "No",
-                    ),
-                  ]
-                ),
-              ),
-              RichText( // Disabled
-                text: TextSpan(
-                  text: "Disabled:",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: (widget.location.hasDisabled!)
-                        ? "Yes"
-                        : "No",
-                    ),
-                  ]
-                ),
-              ),
-              RichText( // EV
-                text: TextSpan(
-                  text: "EV Charging:",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                      TextSpan(
-                      text: (widget.location.hasEV!)
-                        ? "Yes"
-                        : "No",
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:<Widget>[
+                    RichText( // Decals
+                      text: TextSpan(
+                          text: "Decals: ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: locationDecalsAsString(),
+                            ),
+                          ]
                       ),
+                    ),
+                    RichText( // Paid
+                      text: TextSpan(
+                          text: "Paid: ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: (widget.location.hasPaid!)
+                                  ? "Yes"
+                                  : "No",
+                            ),
+                          ]
+                      ),
+                    ),
+                    RichText( // Restrictions
+                        text: TextSpan(
+                            text: "Restrictions: ",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: (widget.location.restrictStart!.compareTo("24/7") == 0)
+                                    ? "24/7"
+                                    : "Mon-Fri: " + widget.location.restrictStart! + " - " + widget.location.restrictEnd!,
+                              )
+                            ]
+                        )
+                    ),
+                    RichText( // Approximate Capacity
+                        text: TextSpan(
+                            text: "Approximate Capacity: ",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: widget.location.approxCap!,
+                              )
+                            ]
+                        )
+                    ),
+                    RichText( // MotorScooter
+                      text: TextSpan(
+                          text: "Motorcycle/Scooter: ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: (widget.location.hasMotorScooter!)
+                                  ? "Yes"
+                                  : "No",
+                            ),
+                          ]
+                      ),
+                    ),
+                    RichText( // Disabled
+                      text: TextSpan(
+                          text: "Disabled: ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: (widget.location.hasDisabled!)
+                                  ? "Yes"
+                                  : "No",
+                            ),
+                          ]
+                      ),
+                    ),
+                    RichText( // EV
+                      text: TextSpan(
+                          text: "EV Charging: ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: (widget.location.hasEV!)
+                                  ? "Yes"
+                                  : "No",
+                            ),
+                          ]
+                      ),
+                    ),
                   ]
-                ),
+                )
               ),
             ]
           ),
           Positioned(
-            left: MediaQuery.of(context).size.width - 24,
+            top: 4.0,
+            left: MediaQuery.of(context).size.width - 36,
             child: GestureDetector(
               onTap: () => widget.onPanelClose(),
-              child: Icon(
+              child: const Icon(
                 Icons.close_rounded,
                 color: Colors.lightBlue,
+                size:32,
               ),
             ),
           ),
