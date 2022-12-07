@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:parkings_/screens/HomePage.dart';
-import 'package:parkings_/services/geolocateService.dart';
+import 'package:uf_parking_map/screens/home_page.dart';
+import 'package:uf_parking_map/services/geolocate_service.dart';
 import 'package:provider/provider.dart';
 
 class MapTransfer extends StatelessWidget {
   MapTransfer({super.key});
-  final locatorService = geolocateService();
+  final locatorService = GeolocateService();
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class MapTransfer extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: Search(),
+        home: const Search(),
       ),
     );
   }

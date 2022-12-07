@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'provider/google_sign_in.dart';
 import 'services/parking_data.dart';
-import 'screens/PageStateController.dart';
+import 'screens/page_state_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,9 +21,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(
-    create: (context) => GoogleSignInProvider(),
-    child: CurrentPage(),
-  );
+        create: (context) => GoogleSignInProvider(),
+        child: const CurrentPage(),
+      );
 }
-
-

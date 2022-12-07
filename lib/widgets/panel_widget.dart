@@ -71,8 +71,8 @@ class _PanelWidgetState extends State<PanelWidget> {
   // STATE CONTROL
   @override
   void initState() {
-    panelMaxHeight = MediaQuery.of(widget.context).size.height * (9/10);
-    panelMinHeight = MediaQuery.of(widget.context).size.height * (1/11);
+    panelMaxHeight = MediaQuery.of(widget.context).size.height * (9 / 10);
+    panelMinHeight = MediaQuery.of(widget.context).size.height * (1 / 11);
     _currentState = const _StateLoading();
     super.initState();
   }
@@ -144,18 +144,15 @@ class _PanelWidgetState extends State<PanelWidget> {
   }
 
   void onListTilePress(ParkingLocation value) {
-    _mc!.moveCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: value.coordPair,
-          zoom: 18,
-        )
-      )
-    );
-    _pc.animatePanelToPosition(0.65); // Implied that panel is open if user presses list tile
+    _mc!.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
+      target: value.coordPair,
+      zoom: 18,
+    )));
+    _pc.animatePanelToPosition(
+        0.65); // Implied that panel is open if user presses list tile
     setState(() {
       parallaxState = true;
-      panelMaxHeight = MediaQuery.of(widget.context).size.height * (6.5/10);
+      panelMaxHeight = MediaQuery.of(widget.context).size.height * (6.5 / 10);
       _currentState = _StateDisplayInfo(
         location: value,
         onPanelClose: onInfoPanelClose,
@@ -166,11 +163,11 @@ class _PanelWidgetState extends State<PanelWidget> {
   void onInfoPanelClose() {
     setState(() {
       parallaxState = false;
-      panelMaxHeight = MediaQuery.of(widget.context).size.height * (9/10);
+      panelMaxHeight = MediaQuery.of(widget.context).size.height * (9 / 10);
       _currentState = _StateScrollingList(
-          controller: _sc!,
-          locationList: listedLocations,
-          tilePressed: onListTilePress,
+        controller: _sc!,
+        locationList: listedLocations,
+        tilePressed: onListTilePress,
       );
     });
   }
@@ -326,6 +323,7 @@ class _StateScrollingList extends StatelessWidget {
     );
   }
 }
+
 /*
     ========== LOCATION INFO STATE ===========
  */
@@ -347,58 +345,57 @@ class _StateDisplayInfoState extends State<_StateDisplayInfo> {
   String locationDecalsAsString() {
     String decalString = "";
     for (String decal in widget.location.decals!) {
-      if (decal.compareTo(widget.location.decals![widget.location.decals!.length - 1]) == 0) {
+      if (decal.compareTo(
+              widget.location.decals![widget.location.decals!.length - 1]) ==
+          0) {
         decalString = "$decalString$decal";
-      }
-      else {
+      } else {
         decalString = "$decalString$decal, ";
       }
     }
     return decalString;
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-        top: MediaQuery.of(context).size.height * (1/11),
+        top: MediaQuery.of(context).size.height * (1 / 11),
       ),
-      child: Stack(
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-               Divider(
-                 height: 8.0,
-                 color: Colors.white,
-               ),
-               Center( // Location name
-                 child: Text(
-                  widget.location.name!,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  )
-                ),
+      child: Stack(children: <Widget>[
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+          const Divider(
+            height: 8.0,
+            color: Colors.white,
+          ),
+          Center(
+            // Location name
+            child: Text(widget.location.name!,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                )),
+          ),
+          Divider(
+            color: Colors.blueGrey,
+            height: 15.0,
+            thickness: 1.0,
+            indent: MediaQuery.of(context).size.width * 0.10,
+            endIndent: MediaQuery.of(context).size.width * 0.10,
+          ),
+          Container(
+              padding: const EdgeInsets.only(
+                top: 4,
+                left: 12,
               ),
-              Divider(
-                color: Colors.blueGrey,
-                height: 15.0,
-                thickness: 1.0,
-                indent: MediaQuery.of(context).size.width * 0.10,
-                endIndent: MediaQuery.of(context).size.width * 0.10,
-              ),
-              Container(
-                padding: EdgeInsets.only(
-                  top: 4,
-                  left: 12,
-                ),
-                child: Column(
+              child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children:<Widget>[
-                    RichText( // Decals
+                  children: <Widget>[
+                    RichText(
+                      // Decals
                       text: TextSpan(
                           text: "Decals: ",
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
@@ -406,58 +403,57 @@ class _StateDisplayInfoState extends State<_StateDisplayInfo> {
                             TextSpan(
                               text: locationDecalsAsString(),
                             ),
-                          ]
-                      ),
+                          ]),
                     ),
-                    RichText( // Paid
+                    RichText(
+                      // Paid
                       text: TextSpan(
                           text: "Paid: ",
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,),
+                            color: Colors.black,
+                          ),
                           children: <TextSpan>[
                             TextSpan(
-                              text: (widget.location.hasPaid!)
-                                  ? "Yes"
-                                  : "No",
+                              text: (widget.location.hasPaid!) ? "Yes" : "No",
                             ),
-                          ]
-                      ),
+                          ]),
                     ),
-                    RichText( // Restrictions
+                    RichText(
+                        // Restrictions
                         text: TextSpan(
                             text: "Restrictions: ",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
                             children: <TextSpan>[
-                              TextSpan(
-                                text: (widget.location.restrictStart!.compareTo("24/7") == 0)
-                                    ? "24/7"
-                                    : "Mon-Fri: " + widget.location.restrictStart! + " - " + widget.location.restrictEnd!,
-                              )
-                            ]
-                        )
-                    ),
-                    RichText( // Approximate Capacity
+                          TextSpan(
+                            text: (widget.location.restrictStart!
+                                        .compareTo("24/7") ==
+                                    0)
+                                ? "24/7"
+                                : "Mon-Fri: ${widget.location.restrictStart!} - ${widget.location.restrictEnd!}",
+                          )
+                        ])),
+                    RichText(
+                        // Approximate Capacity
                         text: TextSpan(
                             text: "Approximate Capacity: ",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
                             children: <TextSpan>[
-                              TextSpan(
-                                text: widget.location.approxCap!,
-                              )
-                            ]
-                        )
-                    ),
-                    RichText( // MotorScooter
+                          TextSpan(
+                            text: widget.location.approxCap!,
+                          )
+                        ])),
+                    RichText(
+                      // MotorScooter
                       text: TextSpan(
                           text: "Motorcycle/Scooter: ",
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
@@ -467,61 +463,52 @@ class _StateDisplayInfoState extends State<_StateDisplayInfo> {
                                   ? "Yes"
                                   : "No",
                             ),
-                          ]
-                      ),
+                          ]),
                     ),
-                    RichText( // Disabled
+                    RichText(
+                      // Disabled
                       text: TextSpan(
                           text: "Disabled: ",
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                           children: <TextSpan>[
                             TextSpan(
-                              text: (widget.location.hasDisabled!)
-                                  ? "Yes"
-                                  : "No",
+                              text:
+                                  (widget.location.hasDisabled!) ? "Yes" : "No",
                             ),
-                          ]
-                      ),
+                          ]),
                     ),
-                    RichText( // EV
+                    RichText(
+                      // EV
                       text: TextSpan(
                           text: "EV Charging: ",
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                           children: <TextSpan>[
                             TextSpan(
-                              text: (widget.location.hasEV!)
-                                  ? "Yes"
-                                  : "No",
+                              text: (widget.location.hasEV!) ? "Yes" : "No",
                             ),
-                          ]
-                      ),
+                          ]),
                     ),
-                  ]
-                )
-              ),
-            ]
-          ),
-          Positioned(
-            top: 4.0,
-            left: MediaQuery.of(context).size.width - 36,
-            child: GestureDetector(
-              onTap: () => widget.onPanelClose(),
-              child: const Icon(
-                Icons.close_rounded,
-                color: Colors.lightBlue,
-                size:32,
-              ),
+                  ])),
+        ]),
+        Positioned(
+          top: 4.0,
+          left: MediaQuery.of(context).size.width - 36,
+          child: GestureDetector(
+            onTap: () => widget.onPanelClose(),
+            child: const Icon(
+              Icons.close_rounded,
+              color: Colors.lightBlue,
+              size: 32,
             ),
           ),
-        ]
-      ),
+        ),
+      ]),
     );
   }
 }
-
