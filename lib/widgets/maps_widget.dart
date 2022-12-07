@@ -15,7 +15,10 @@ import '../services/parking_data.dart';
 class MapsWidget extends StatefulWidget {
   const MapsWidget({
     Key? key,
+    required this.giveControllerToParent,
   }) : super(key: key);
+
+  final Function(GoogleMapController controller) giveControllerToParent;
 
   @override
   State<MapsWidget> createState() => _MapsWidgetState();
@@ -52,6 +55,7 @@ class _MapsWidgetState extends State<MapsWidget> {
             ),
             onMapCreated: (GoogleMapController controller) {
               _mapController = controller;
+              widget.giveControllerToParent(controller);
               setState(() {
                 bottomOffset = MediaQuery.of(context).size.height * (1/11);
               });

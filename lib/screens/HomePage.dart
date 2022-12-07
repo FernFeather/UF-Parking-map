@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import '../widgets/panel_widget.dart';
-
 /*
   Notes:
     This class is kinda useless, but I guess it exists in case we change
     screens. Like, go from log in screen to the home screen, where this is the
     home screen.
- */
+*/
+import 'package:flutter/material.dart';
+import '../widgets/panel_widget.dart';
+
 class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
 
@@ -23,7 +23,7 @@ class _SearchState extends State<Search> {
             resizeToAvoidBottomInset: false, // Needed to avoid keyboard from pushing widgets
             body: Stack(
               children: <Widget>[
-                PanelWidget(),
+                PanelWidget(context: context,),
               ],
             )
         )

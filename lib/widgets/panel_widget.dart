@@ -12,9 +12,10 @@
         - Make sure list items are filtered as they are searched [DONE]
             - Update when searchbar widget updates?
       2. Make list tiles buttons
-        - Give list tiles state where they change color on press
+        - Give list tiles state where they change color on press [DONE]
         - On release have panel change state to info state -> (3)
-        - On button click, center camera position to location coordinates
+        - On list tile click, center camera position to location coordinates
+        - On list tile click, fill search bar with name of location clicked
       3. Make info state widget
         - enable parallax to center location marker
         - Display parking area info
@@ -28,14 +29,19 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../services/parking_data.dart';
 import 'maps_widget.dart';
 import 'searchbar_widget.dart';
 
 class PanelWidget extends StatefulWidget {
-  const PanelWidget({Key? key}) : super(key: key);
+  const PanelWidget({
+    Key? key,
+    required this.context,
+  }) : super(key: key);
 
+  final BuildContext context;
   @override
   State<PanelWidget> createState() => _PanelWidgetState();
 }
@@ -46,19 +52,29 @@ class PanelWidget extends StatefulWidget {
   ============= ============== ==============
 */
 class _PanelWidgetState extends State<PanelWidget> {
+  // Variables for panel properties
+  bool parallaxState = false;
+  double panelMaxHeight = 0.0;
+  double panelMinHeight = 0.0;
+
   // Stores state parameters for panelBuilder
   bool open = false;
   bool onSlideCallState = false;
   Widget? _currentState;
+  // Controllers
   ScrollController? _sc;
+  GoogleMapController? _mc;
   final _pc = PanelController();
   // Important search list parameters
   List<ParkingLocation> listedLocations = [];
 
+  // STATE CONTROL
   @override
   void initState() {
-    super.initState();
+    panelMaxHeight = MediaQuery.of(widget.context).size.height * (9/10);
+    panelMinHeight = MediaQuery.of(widget.context).size.height * (1/11);
     _currentState = const _StateLoading();
+    super.initState();
   }
 
   void onOpen() {
@@ -92,6 +108,7 @@ class _PanelWidgetState extends State<PanelWidget> {
       _currentState = _StateScrollingList(
         controller: _sc!,
         locationList: listedLocations,
+        tilePressed: onListTilePress,
       );
     }
     onSlideCallState = false;
@@ -115,6 +132,45 @@ class _PanelWidgetState extends State<PanelWidget> {
       _currentState = _StateScrollingList(
         controller: _sc!,
         locationList: listedLocations,
+        tilePressed: onListTilePress,
+      );
+    });
+  }
+
+  void getMapController(GoogleMapController controller) {
+    setState(() {
+      _mc = controller;
+    });
+  }
+
+  void onListTilePress(ParkingLocation value) {
+    _mc!.moveCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: value.coordPair,
+          zoom: 18,
+        )
+      )
+    );
+    _pc.animatePanelToPosition(0.65/0.90); // Implied that panel is open if user presses list tile
+    setState(() {
+      parallaxState = true;
+      panelMaxHeight = MediaQuery.of(widget.context).size.height * (6.5/10);
+      _currentState = _StateDisplayInfo(
+        location: value,
+        onPanelClose: onInfoPanelClose,
+      );
+    });
+  }
+
+  void onInfoPanelClose() {
+    setState(() {
+      parallaxState = false;
+      panelMaxHeight = MediaQuery.of(widget.context).size.height * (9/10);
+      _currentState = _StateScrollingList(
+          controller: _sc!,
+          locationList: listedLocations,
+          tilePressed: onListTilePress,
       );
     });
   }
@@ -130,11 +186,13 @@ class _PanelWidgetState extends State<PanelWidget> {
         controller: _pc,
         backdropEnabled: true,
         backdropOpacity: 0.0,
-        maxHeight: MediaQuery.of(context).size.height * (9/10),
-        minHeight: MediaQuery.of(context).size.height * (1/11),
-        parallaxEnabled: false,
-        parallaxOffset: 0.4,
-        body: const MapsWidget(),
+        maxHeight: panelMaxHeight,
+        minHeight: panelMinHeight,
+        parallaxEnabled: parallaxState,
+        parallaxOffset: 0.45,
+        body: MapsWidget(
+          giveControllerToParent: getMapController,
+        ),
         /*
         ===================================================
         ============= SLIDE UP PANEL HEADER  ==============
@@ -225,11 +283,13 @@ class _StateLoading extends StatelessWidget {
 class _StateScrollingList extends StatelessWidget {
   final ScrollController controller;
   final List<ParkingLocation> locationList;
+  final Function(ParkingLocation location) tilePressed;
 
   const _StateScrollingList({
     Key? key,
     required this.controller,
     required this.locationList,
+    required this.tilePressed,
   }) : super(key: key);
 
   @override
@@ -239,18 +299,25 @@ class _StateScrollingList extends StatelessWidget {
       itemCount: locationList.length,
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).size.height * (1 / 11),
-        bottom: 12.0,
-        left: 12.0,
-        right: 12.0,
       ),
       itemBuilder: (BuildContext context, int i) {
-        return GestureDetector(
-          child: Card(
-            child: ListTile(
-              title: Text(locationList[i].name!),
-              trailing: const Icon(
-                Icons.keyboard_arrow_right_rounded,
-                color: Colors.lightBlue,
+        return TextButton(
+          onPressed: () => tilePressed(locationList[i]),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width - 24.0,
+            child: Card(
+              child: ListTile(
+                dense: true,
+                title: Text(
+                  locationList[i].name!,
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                trailing: const Icon(
+                  Icons.keyboard_arrow_right_rounded,
+                  color: Colors.lightBlue,
+                ),
               ),
             ),
           ),
@@ -262,4 +329,173 @@ class _StateScrollingList extends StatelessWidget {
 /*
     ========== LOCATION INFO STATE ===========
  */
+class _StateDisplayInfo extends StatefulWidget {
+  const _StateDisplayInfo({
+    Key? key,
+    required this.location,
+    required this.onPanelClose,
+  }) : super(key: key);
+
+  final ParkingLocation location;
+  final Function() onPanelClose;
+
+  @override
+  State<_StateDisplayInfo> createState() => _StateDisplayInfoState();
+}
+
+class _StateDisplayInfoState extends State<_StateDisplayInfo> {
+  String locationDecalsAsString() {
+    String decalString = "";
+    for (String decal in widget.location.decals!) {
+      if (decal.compareTo(widget.location.decals![widget.location.decals!.length - 1]) == 0) {
+        decalString = "$decalString$decal";
+      }
+      else {
+        decalString = "$decalString$decal, ";
+      }
+    }
+    return decalString;
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(
+        top: MediaQuery.of(context).size.height * (1/11),
+      ),
+      child: Stack(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+               Center( // Location name
+                child: Text(
+                  widget.location.name!,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  )
+                ),
+              ),
+              RichText( // Decals
+                text: TextSpan(
+                  text: "Decals: ",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: locationDecalsAsString(),
+                    ),
+                  ]
+                ),
+              ),
+              RichText( // Paid
+                text: TextSpan(
+                  text: "Paid: ",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: (widget.location.hasPaid!)
+                      ? "Yes"
+                      : "No",
+                    ),
+                  ]
+                ),
+              ),
+              RichText( // Restrictions
+                text: TextSpan(
+                  text: "Restrictions: ",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: (widget.location.restrictStart!.compareTo("24/7") == 0)
+                      ? "24/7"
+                      : "Mon-Fri: " + widget.location.restrictStart! + " - " + widget.location.restrictEnd!,
+                    )
+                  ]
+                )
+              ),
+              RichText( // Approximate Capacity
+                text: TextSpan(
+                  text: "Approximate Capacity: ",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: widget.location.approxCap!,
+                    )
+                  ]
+                )
+              ),
+              RichText( // MotorScooter
+                text: TextSpan(
+                  text: "Motorcycle/Scooter:",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: (widget.location.hasMotorScooter!)
+                      ? "Yes"
+                      : "No",
+                    ),
+                  ]
+                ),
+              ),
+              RichText( // Disabled
+                text: TextSpan(
+                  text: "Disabled:",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: (widget.location.hasDisabled!)
+                        ? "Yes"
+                        : "No",
+                    ),
+                  ]
+                ),
+              ),
+              RichText( // EV
+                text: TextSpan(
+                  text: "EV Charging:",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                      TextSpan(
+                      text: (widget.location.hasEV!)
+                        ? "Yes"
+                        : "No",
+                      ),
+                  ]
+                ),
+              ),
+            ]
+          ),
+          Positioned(
+            left: MediaQuery.of(context).size.width - 24,
+            child: GestureDetector(
+              onTap: () => widget.onPanelClose(),
+              child: Icon(
+                Icons.close_rounded,
+                color: Colors.lightBlue,
+              ),
+            ),
+          ),
+        ]
+      ),
+    );
+  }
+}
 
