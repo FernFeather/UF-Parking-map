@@ -44,7 +44,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBe36l1hjFeGrBgXIvpd4PkRl_00yN-fXw',
+    apiKey: 'API KEY HERE',
     appId: '1:319928501602:web:9ff541d4f67dc8cbef583b',
     messagingSenderId: '319928501602',
     projectId: 'uf-parking-map',
@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDwxtfjo-QtYcGj_zGzDBiBXq1ic9lROXw',
+    apiKey: 'API KEY HERE',
     appId: '1:319928501602:android:d4122a79d7890c2def583b',
     messagingSenderId: '319928501602',
     projectId: 'uf-parking-map',
@@ -64,7 +64,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBShwEd7nRCuxFSB6eMmNeZZf3Xzjsk-To',
+    apiKey: 'API KEY HERE',
     appId: '1:319928501602:ios:2f8b1d63af34d9a7ef583b',
     messagingSenderId: '319928501602',
     projectId: 'uf-parking-map',
@@ -76,7 +76,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBShwEd7nRCuxFSB6eMmNeZZf3Xzjsk-To',
+    apiKey: 'API KEY HERE',
     appId: '1:319928501602:ios:2f8b1d63af34d9a7ef583b',
     messagingSenderId: '319928501602',
     projectId: 'uf-parking-map',
