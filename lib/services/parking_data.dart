@@ -26,7 +26,7 @@ class ParkingDatabaseService {
   static startEventListener() {
     dbRef.onValue.listen((DatabaseEvent event) {
       if (!event.snapshot.exists) {
-        print('No data available');
+        // print('No data available');
       } else {
         // Initialize and update parking data
         parkingList.clear();
